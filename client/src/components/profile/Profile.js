@@ -14,14 +14,18 @@ const Profile = ({
   getProfileById,
   profile: { profile, loading },
   auth,
-  match
+  match,
 }) => {
   useEffect(() => {
     getProfileById(match.params.id)
   }, [getProfileById, match.params.id])
 
+  console.log("profile: ");
+  console.log(profile);
+
   return (
     <Fragment>
+      
       {profile === null || loading ? (
         <Spinner />
       ) : (
@@ -36,31 +40,45 @@ const Profile = ({
                 Edit Profile
               </Link>
             )}
-            <div class="profile-grid my-1">
-              <ProfileTop profile={profile} />
-              <ProfileAbout profile={profile} />
-              <div className="profile-exp bg-what p-2">
-                <h2 className="text-primary">Experience</h2>
-                {profile.experience.length > 0 ? (<Fragment>
-                  {profile.experience.map(experience => (
-                    <ProfileExperience key={experience._id} experience={experience} />
+          <div className='profile-grid my-1'>
+            <ProfileTop profile={profile} />
+            <ProfileAbout profile={profile} />
+            <div className='profile-exp bg-what p-2'>
+              <h2 className='text-primary'>Experience</h2>
+              {profile.experience.length > 0 ? (
+                <Fragment>
+                  {profile.experience.map((experience) => (
+                    <ProfileExperience
+                      key={experience._id}
+                      experience={experience}
+                    />
                   ))}
-                </Fragment>) : (<h4>No experience credentials</h4>)}
-              </div>
-
-              <div className="profile-edu bg-what p-2">
-                <h2 className="text-primary">Education</h2>
-                {profile.education.length > 0 ? (<Fragment>
-                  {profile.education.map(education => (
-                    <ProfileEducation key={education._id} education={education} />
-                  ))}
-                </Fragment>) : (<h4>No education credentials</h4>)}
-              </div>
-
-              {profile.githubusername &&(
-                <ProfileGithub username={profile.githubusername} />
+                </Fragment>
+              ) : (
+                <h4>No experience credentials</h4>
               )}
             </div>
+
+            <div className='profile-edu bg-what p-2'>
+              <h2 className='text-primary'>Education</h2>
+              {profile.education.length > 0 ? (
+                <Fragment>
+                  {profile.education.map((education) => (
+                    <ProfileEducation
+                      key={education._id}
+                      education={education}
+                    />
+                  ))}
+                </Fragment>
+              ) : (
+                <h4>No education credentials</h4>
+              )}
+            </div>
+
+            {profile.githubusername && (
+              <ProfileGithub username={profile.githubusername} />
+            )}
+          </div>
         </Fragment>
       )}
     </Fragment>
@@ -70,12 +88,12 @@ const Profile = ({
 Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   profile: state.profile,
-  auth: state.auth
+  auth: state.auth,
 })
 
 export default connect(mapStateToProps, { getProfileById })(Profile)
